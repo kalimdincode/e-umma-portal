@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Portal - E-Umma</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6fa;
+        }
+        .login-container, .portal-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .login-box {
+            background: #fff;
+            padding: 2rem 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            width: 340px;
+        }
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        .login-box label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        .login-box input[type="text"], .login-box input[type="password"] {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #0078d7;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .login-box button:hover {
+            background: #005fa3;
+        }
+        #message {
+            text-align: center;
+            margin-top: 1rem;
+            color: #d8000c;
+            font-weight: bold;
+        }
+        /* Portal Styles */
+        .portal-main {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+        .sidebar {
+            width: 240px;
+            background: linear-gradient(135deg, #0078d7 60%, #1a237e 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1rem 1rem 1rem;
+            position: relative;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+        }
+        .sidebar .logo-img {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .sidebar .logo-img img {
+            width: 120px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        .sidebar h3 {
+            margin: 0 0 2rem 0;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            text-align: center;
+            color: #fff;
+            text-shadow: 1px 1px 4px #0002;
+        }
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: background 0.2s, color 0.2s;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .sidebar a.active, .sidebar a:hover {
+            background: #fff;
+            color: #0078d7;
+        }
+        .sidebar .logout-btn {
+            margin-top: auto;
+            background: #d8000c;
+            color: #fff;
+            text-align: center;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+        .sidebar .logout-btn:hover {
+            background: #a30000;
+        }
+        .content {
+            flex: 1;
+            padding: 2.5rem 3rem;
+            background: #f4f6fa;
+            overflow-y: auto;
+        }
+        .dashboard-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .dashboard-card h4 {
+            margin-top: 0;
+            color: #1a237e;
+        }
+        .student-info ul {
+            list-style: none;
+            padding: 0;
+        }
+        .student-info li {
+            margin-bottom: 0.7rem;
+            font-size: 1.05rem;
+        }
+        @media (max-width: 700px) {
+            .portal-main {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                padding: 1rem 0.5rem;
+                justify-content: space-between;
+            }
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <h2>Student Portal Login</h2>
+            <form id="loginForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p id="message"></p>
+        </div>
+    </div>
+    <!-- Portal Page -->
+    <div class="portal-container" id="portalContainer" style="display:none;">
+        <div class="portal-main">
+            <nav class="sidebar">
+                <div class="logo-img">
+                    <img src="https://umma.ac.ke/wp-content/uploads/2022/07/umma-graduation.jpg" alt="Umma Graduation">
+                </div>
+                <h3>E-Umma Portal</h3>
+                <a href="#" class="active" onclick="showSection('dashboard')">Dashboard</a>
+                <a href="#" onclick="showSection('profile')">Profile</a>
+                <a href="#" onclick="showSection('courses')">Courses</a>
+                <a href="#" onclick="showSection('results')">Results</a>
+                <a href="#" onclick="showSection('unitreg')">Unit Registration</a>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </nav>
+            <div class="content">
+                <div id="dashboardSection" class="dashboard-card">
+                    <h4>Welcome, Salim Kalimudin!</h4>
+                    <p>This is your student dashboard. Here you can access your profile, courses, and results.</p>
+                </div>
+                <div id="profileSection" class="dashboard-card" style="display:none;">
+                    <h4>Profile Information</h4>
+                    <div class="student-info">
+                        <ul>
+                            <li><strong>Name:</strong> Salim Kalimudin</li>
+                            <li><strong>Student ID:</strong> 12345</li>
+                            <li><strong>Email:</strong> salim.kalimudin@umma.ac.ke</li>
+                            <li><strong>Course:</strong> Computer Science</li>
+                            <li><strong>Year:</strong> 2</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="coursesSection" class="dashboard-card" style="display:none;">
+                    <h4>My Courses</h4>
+                    <ul>
+                        <li>Introduction to Programming</li>
+                        <li>Database Systems</li>
+                        <li>Web Development</li>
+                        <li>Mathematics II</li>
+                    </ul>
+                </div>
+                <div id="resultsSection" class="dashboard-card" style="display:none;">
+                    <h4>Results</h4>
+                    <table style="width:100%;border-collapse:collapse;">
+                        <tr style="background:#f0f0f0;">
+                            <th style="padding:8px;border:1px solid #ddd;">Course</th>
+                            <th style="padding:8px;border:1px solid #ddd;">Grade</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px;border:1px solid #ddd;">Introduction to Programming</td>
+                            <td style="padding:8px;border:1px solid #ddd;">A</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px;border:1px solid #ddd;">Database Systems</td>
+                            <td style="padding:8px;border:1px solid #ddd;">B+</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px;border:1px solid #ddd;">Web Development</td>
+                            <td style="padding:8px;border:1px solid #ddd;">A-</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px;border:1px solid #ddd;">Mathematics II</td>
+                            <td style="padding:8px;border:1px solid #ddd;">B</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="unitregSection" class="dashboard-card" style="display:none;">
+                    <h4>Unit Registration</h4>
+                    <form id="unitRegForm">
+                        <label for="unitSelect"><strong>Select Unit:</strong></label>
+                        <select id="unitSelect" required>
+                            <option value="">-- Choose a unit --</option>
+                            <option value="CSC2422">CSC2422 - Object Oriented Programming II (Mr. Patrick Muchiri Alianda, Mon 10:00-12:00)</option>
+                            <option value="CSC2101">CSC2101 - Introduction to Algorithms (Ms. Fatma Yusuf, Tue 9:00-11:00)</option>
+                            <option value="CSC2203">CSC2203 - Database Systems (Dr. Ahmed Noor, Wed 2:00-4:00)</option>
+                        </select>
+                        <button type="submit" style="margin-top:1rem;">Register</button>
+                    </form>
+                    <div id="registeredUnits" style="margin-top:2rem;">
+                        <strong>Registered Units:</strong>
+                        <ul id="unitsList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Login logic
+        const loginForm = document.getElementById('loginForm');
+        const loginContainer = document.getElementById('loginContainer');
+        const portalContainer = document.getElementById('portalContainer');
+        const message = document.getElementById('message');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simple check (replace with real authentication in production)
+            if (username === 'student' && password === 'umma2024') {
+                message.style.color = '#007700';
+                message.textContent = 'Login successful!';
+                setTimeout(() => {
+                    loginContainer.style.display = 'none';
+                    portalContainer.style.display = 'flex';
+                }, 800);
+            } else {
+                message.style.color = '#d8000c';
+                message.textContent = 'Invalid username or password.';
+            }
+        });
+
+        logoutBtn.addEventListener('click', function() {
+            portalContainer.style.display = 'none';
+            loginContainer.style.display = 'flex';
+            loginForm.reset();
+            message.textContent = '';
+        });
+
+        // Navigation logic
+        function showSection(section) {
+            document.getElementById('dashboardSection').style.display = 'none';
+            document.getElementById('profileSection').style.display = 'none';
+            document.getElementById('coursesSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('unitregSection').style.display = 'none';
+
+            if (section === 'dashboard') {
+                document.getElementById('dashboardSection').style.display = 'block';
+            } else if (section === 'profile') {
+                document.getElementById('profileSection').style.display = 'block';
+            } else if (section === 'courses') {
+                document.getElementById('coursesSection').style.display = 'block';
+            } else if (section === 'results') {
+                document.getElementById('resultsSection').style.display = 'block';
+            } else if (section === 'unitreg') {
+                document.getElementById('unitregSection').style.display = 'block';
+            }
+
+            // Update active link
+            const links = document.querySelectorAll('.sidebar a');
+            links.forEach(link => link.classList.remove('active'));
+            if (section === 'dashboard') links[0].classList.add('active');
+            if (section === 'profile') links[1].classList.add('active');
+            if (section === 'courses') links[2].classList.add('active');
+            if (section === 'results') links[3].classList.add('active');
+            if (section === 'unitreg') links[4].classList.add('active');
+        }
+
+        // Unit registration logic
+        const unitRegForm = document.getElementById('unitRegForm');
+        const unitSelect = document.getElementById('unitSelect');
+        const unitsList = document.getElementById('unitsList');
+        let registeredUnits = [];
+
+        if (unitRegForm) {
+            unitRegForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selectedOption = unitSelect.options[unitSelect.selectedIndex];
+                const unitValue = unitSelect.value;
+                const unitText = selectedOption.text;
+
+                if (unitValue && !registeredUnits.includes(unitValue)) {
+                    registeredUnits.push(unitValue);
+
+                    // Add to list
+                    const li = document.createElement('li');
+                    li.textContent = unitText + " ";
+                    // Drop button
+                    const dropBtn = document.createElement('button');
+                    dropBtn.textContent = "Drop";
+                    dropBtn.style.marginLeft = "10px";
+                    dropBtn.style.background = "#d8000c";
+                    dropBtn.style.color = "#fff";
+                    dropBtn.style.border = "none";
+                    dropBtn.style.borderRadius = "4px";
+                    dropBtn.style.cursor = "pointer";
+                    dropBtn.onclick = function() {
+                        registeredUnits = registeredUnits.filter(u => u !== unitValue);
+                        li.remove();
+                    };
+                    li.appendChild(dropBtn);
+                    unitsList.appendChild(li);
+                }
+                unitSelect.value = "";
+            });
+        }
+    </script>
+</body>
+</html>
+
